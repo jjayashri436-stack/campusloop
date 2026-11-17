@@ -1,0 +1,159 @@
+[
+  {
+    "country": "India",
+    "cities": [
+      {
+        "city": "Chennai",
+        "colleges": [
+          "Anna University (CEG / ACT Campus)",
+          "Indian Institute of Technology Madras (IIT Madras)",
+          "SRM Institute of Science and Technology",
+          "Loyola College Chennai",
+          "SSN College of Engineering",
+          "Madras Christian College (MCC)"
+        ]
+      },
+      {
+        "city": "Bengaluru",
+        "colleges": [
+          "Indian Institute of Science (IISc Bangalore)",
+          "RV College of Engineering",
+          "PES University",
+          "BMS College of Engineering",
+          "Christ University Bangalore"
+        ]
+      },
+      {
+        "city": "Mumbai",
+        "colleges": [
+          "Indian Institute of Technology Bombay (IIT Bombay)",
+          "Veermata Jijabai Technological Institute (VJTI)",
+          "St. Xavier's College Mumbai",
+          "KJ Somaiya College of Engineering"
+        ]
+      },
+      {
+        "city": "Delhi NCR",
+        "colleges": [
+          "Indian Institute of Technology Delhi (IIT Delhi)",
+          "Delhi Technological University (DTU)",
+          "Netaji Subhas University of Technology (NSUT)",
+          "Indraprastha Institute of Information Technology (IIIT Delhi)",
+          "Delhi University (St. Stephen's & SRCC)"
+        ]
+      },
+      {
+        "city": "Hyderabad",
+        "colleges": [
+          "IIIT Hyderabad",
+          "IIT Hyderabad",
+          "BITS Pilani Hyderabad Campus",
+          "Osmania University"
+        ]
+      }
+    ]
+  },
+  {
+    "country": "United States",
+    "cities": [
+      {
+        "city": "Boston / Cambridge",
+        "colleges": [
+          "Massachusetts Institute of Technology (MIT)",
+          "Harvard University",
+          "Boston University",
+          "Northeastern University"
+        ]
+      },
+      {
+        "city": "San Francisco Bay Area",
+        "colleges": [
+          "Stanford University",
+          "University of California, Berkeley",
+          "San Jose State University"
+        ]
+      },
+      {
+        "city": "New York City",
+        "colleges": [
+          "Columbia University",
+          "New York University (NYU)",
+          "Cornell Tech"
+        ]
+      }
+    ]
+  },
+  {
+    "country": "United Kingdom",
+    "cities": [
+      {
+        "city": "London",
+        "colleges": [
+          "Imperial College London",
+          "University College London (UCL)",
+          "King's College London",
+          "London School of Economics (LSE)"
+        ]
+      },
+      {
+        "city": "Oxford / Cambridge",
+        "colleges": [
+          "University of Oxford",
+          "University of Cambridge"
+        ]
+      }
+    ]
+  },
+  {
+    "country": "Canada",
+    "cities": [
+      {
+        "city": "Toronto",
+        "colleges": [
+          "University of Toronto",
+          "Toronto Metropolitan University",
+          "York University"
+        ]
+      },
+      {
+        "city": "Vancouver",
+        "colleges": [
+          "University of British Columbia (UBC)",
+          "Simon Fraser University"
+        ]
+      }
+    ]
+  },
+  {
+    "country": "Singapore",
+    "cities": [
+      {
+        "city": "Singapore",
+        "colleges": [
+          "National University of Singapore (NUS)",
+          "Nanyang Technological University (NTU)",
+          "Singapore Management University (SMU)"
+        ]
+      }
+    ]
+  },
+  {
+    "country": "Germany",
+    "cities": [
+      {
+        "city": "Munich",
+        "colleges": [
+          "Technical University of Munich (TUM)",
+          "Ludwig Maximilian University of Munich (LMU)"
+        ]
+      },
+      {
+        "city": "Berlin",
+        "colleges": [
+          "Technical University of Berlin (TU Berlin)",
+          "Humboldt University of Berlin"
+        ]
+      }
+    ]
+  }
+]

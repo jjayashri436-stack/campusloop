@@ -1,0 +1,316 @@
+[
+  {
+    "id": "stu-1",
+    "name": "Renuga J",
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
+    "country": "India",
+    "city": "Chennai",
+    "college": "Anna University (CEG / ACT Campus)",
+    "department": "Computer Science & Engineering",
+    "year": "3rd Year (Junior)",
+    "bio": "Passionate about full-stack web engineering, Python development, and clean UI design. Love peer tutoring and learning cutting-edge tech!",
+    "verified": true,
+    "rating": 4.9,
+    "reviewCount": 18,
+    "exchangesCompleted": 14,
+    "skillsTaught": [
+      "Python Programming",
+      "UI/UX Prototyping in Figma",
+      "REST API Development",
+      "Full Stack Django & SQLite"
+    ],
+    "skillsLearning": [
+      "Full Stack Next.js",
+      "Docker & Kubernetes",
+      "Public Speaking"
+    ],
+    "badge": "Top Campus Peer Mentor",
+    "isCurrentUser": true
+  },
+  {
+    "id": "stu-2",
+    "name": "Ashwin Kumar",
+    "avatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80",
+    "country": "India",
+    "city": "Chennai",
+    "college": "Anna University (CEG / ACT Campus)",
+    "department": "Computer Science & Engineering",
+    "year": "4th Year (Senior)",
+    "bio": "Final year senior, placed at product company. Excited to coach juniors in React, Next.js, and technical interview coding challenges.",
+    "verified": true,
+    "rating": 5.0,
+    "reviewCount": 32,
+    "exchangesCompleted": 28,
+    "skillsTaught": [
+      "React.js & Next.js",
+      "Full Stack Web Dev",
+      "Mock Tech Interviews"
+    ],
+    "skillsLearning": [
+      "Blender 3D",
+      "Spanish Language"
+    ],
+    "badge": "Senior Mentor",
+    "isCurrentUser": false
+  },
+  {
+    "id": "stu-3",
+    "name": "Priya Sundaram",
+    "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&auto=format&fit=crop&q=80",
+    "country": "India",
+    "city": "Chennai",
+    "college": "Anna University (CEG / ACT Campus)",
+    "department": "Information Technology",
+    "year": "3rd Year (Junior)",
+    "bio": "Competitive programmer with 400+ LeetCode problems solved. I love breaking down Trees, Dynamic Programming, and Graph algorithms into intuitive steps.",
+    "verified": true,
+    "rating": 4.95,
+    "reviewCount": 26,
+    "exchangesCompleted": 22,
+    "skillsTaught": [
+      "Data Structures & Algorithms in Java",
+      "Competitive Coding",
+      "SQL & Database Design"
+    ],
+    "skillsLearning": [
+      "Video Editing",
+      "Guitar Basics"
+    ],
+    "badge": "Algorithms Specialist",
+    "isCurrentUser": false
+  },
+  {
+    "id": "stu-4",
+    "name": "Karthik Raman",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+    "country": "India",
+    "city": "Chennai",
+    "college": "Anna University (CEG / ACT Campus)",
+    "department": "Electronics & Communication",
+    "year": "2nd Year (Sophomore)",
+    "bio": "Content creator and video editor for college club and YouTube. Teaching Premiere Pro, After Effects motion graphics, and audio mastering.",
+    "verified": true,
+    "rating": 4.88,
+    "reviewCount": 15,
+    "exchangesCompleted": 12,
+    "skillsTaught": [
+      "Video Editing (Premiere Pro)",
+      "Motion Graphics (After Effects)",
+      "Thumbnail Design"
+    ],
+    "skillsLearning": [
+      "Python for Automation",
+      "Public Speaking"
+    ],
+    "badge": "Creative Lead",
+    "isCurrentUser": false
+  },
+  {
+    "id": "stu-5",
+    "name": "Sneha Patel",
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80",
+    "country": "India",
+    "city": "Chennai",
+    "college": "Anna University (CEG / ACT Campus)",
+    "department": "Mechanical Engineering",
+    "year": "4th Year (Senior)",
+    "bio": "Formula student team design lead. I teach SolidWorks, AutoCAD, and 3D modeling for engineers and hobbyists.",
+    "verified": true,
+    "rating": 4.9,
+    "reviewCount": 19,
+    "exchangesCompleted": 16,
+    "skillsTaught": [
+      "3D CAD Modeling (SolidWorks)",
+      "Blender 3D Basics",
+      "Product Prototype Design"
+    ],
+    "skillsLearning": [
+      "Machine Learning",
+      "German A1"
+    ],
+    "badge": "CAD Specialist",
+    "isCurrentUser": false
+  },
+  {
+    "id": "stu-6",
+    "name": "Harish Varma",
+    "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
+    "country": "India",
+    "city": "Chennai",
+    "college": "Indian Institute of Technology Madras (IIT Madras)",
+    "department": "Computer Science & Engineering",
+    "year": "3rd Year (Junior)",
+    "bio": "AI researcher working on LLMs, computer vision, and PyTorch. Keen to swap AI knowledge for creative design and video storytelling.",
+    "verified": true,
+    "rating": 4.96,
+    "reviewCount": 24,
+    "exchangesCompleted": 20,
+    "skillsTaught": [
+      "Deep Learning & PyTorch",
+      "Machine Learning Foundations",
+      "Python for Data Science"
+    ],
+    "skillsLearning": [
+      "Figma UI Design",
+      "Podcasting & Audio Editing"
+    ],
+    "badge": "AI Researcher",
+    "isCurrentUser": false
+  },
+  {
+    "id": "stu-7",
+    "name": "Meera Nair",
+    "avatar": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&auto=format&fit=crop&q=80",
+    "country": "India",
+    "city": "Chennai",
+    "college": "Loyola College Chennai",
+    "department": "Visual Communication",
+    "year": "4th Year (Senior)",
+    "bio": "Brand identity designer and digital illustrator. Freelanced for 10+ startups. Let's exchange design fundamentals for web development skills!",
+    "verified": true,
+    "rating": 4.92,
+    "reviewCount": 29,
+    "exchangesCompleted": 25,
+    "skillsTaught": [
+      "Graphic Design & Typography",
+      "Brand Identity & Logo Design",
+      "Figma Design Systems"
+    ],
+    "skillsLearning": [
+      "HTML/CSS/JS",
+      "React Basics"
+    ],
+    "badge": "Design Mentor",
+    "isCurrentUser": false
+  },
+  {
+    "id": "stu-8",
+    "name": "Devendra Rao",
+    "avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&auto=format&fit=crop&q=80",
+    "country": "India",
+    "city": "Chennai",
+    "college": "SRM Institute of Science and Technology",
+    "department": "Software Engineering",
+    "year": "3rd Year (Junior)",
+    "bio": "Mobile app developer with published apps on Google Play and App Store. I teach Flutter and cross-platform mobile development.",
+    "verified": true,
+    "rating": 4.87,
+    "reviewCount": 16,
+    "exchangesCompleted": 13,
+    "skillsTaught": [
+      "Flutter & Dart Mobile Dev",
+      "Firebase Integration",
+      "Mobile UI Patterns"
+    ],
+    "skillsLearning": [
+      "System Architecture",
+      "Figma"
+    ],
+    "badge": "App Developer",
+    "isCurrentUser": false
+  },
+  {
+    "id": "stu-9",
+    "name": "David Chen",
+    "avatar": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80",
+    "country": "United States",
+    "city": "San Francisco Bay Area",
+    "college": "Stanford University",
+    "department": "Computer Science",
+    "year": "Graduate Student",
+    "bio": "Stanford grad studying distributed computing and cloud-native systems. Enthusiastic about mentoring global peers on scalable backends and Go/Rust.",
+    "verified": true,
+    "rating": 4.98,
+    "reviewCount": 35,
+    "exchangesCompleted": 31,
+    "skillsTaught": [
+      "System Design & Distributed Systems",
+      "Go Programming",
+      "Cloud Architecture (AWS)"
+    ],
+    "skillsLearning": [
+      "Indian Carnatic & Fusion Music",
+      "Mandarin Advanced"
+    ],
+    "badge": "Global Mentor",
+    "isCurrentUser": false
+  },
+  {
+    "id": "stu-10",
+    "name": "Emily Watson",
+    "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&auto=format&fit=crop&q=80",
+    "country": "United Kingdom",
+    "city": "Oxford / Cambridge",
+    "college": "University of Oxford",
+    "department": "Computer Science & Philosophy",
+    "year": "3rd Year (Junior)",
+    "bio": "Oxford Debating Union member and tech ethicist. I help students master academic essay writing, clear technical documentation, and persuasive public speaking.",
+    "verified": true,
+    "rating": 4.97,
+    "reviewCount": 27,
+    "exchangesCompleted": 24,
+    "skillsTaught": [
+      "Public Speaking & Debating",
+      "Technical Academic Writing",
+      "Ethics in Artificial Intelligence"
+    ],
+    "skillsLearning": [
+      "Full-Stack Python",
+      "UI/UX Design"
+    ],
+    "badge": "Communication Coach",
+    "isCurrentUser": false
+  },
+  {
+    "id": "stu-11",
+    "name": "Lucas Müller",
+    "avatar": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=200&auto=format&fit=crop&q=80",
+    "country": "Germany",
+    "city": "Munich",
+    "college": "Technical University of Munich (TUM)",
+    "department": "Informatics",
+    "year": "2nd Year (Sophomore)",
+    "bio": "CTF player and cybersecurity enthusiast. Teaching web security fundamentals, ethical hacking principles, and network analysis with Wireshark.",
+    "verified": true,
+    "rating": 4.89,
+    "reviewCount": 14,
+    "exchangesCompleted": 11,
+    "skillsTaught": [
+      "Cybersecurity & Ethical Hacking",
+      "Linux Command Line & Bash",
+      "Network Protocols Analysis"
+    ],
+    "skillsLearning": [
+      "Video Editing",
+      "English Pronunciation"
+    ],
+    "badge": "Security Enthusiast",
+    "isCurrentUser": false
+  },
+  {
+    "id": "stu-12",
+    "name": "Sarah Tan",
+    "avatar": "https://images.unsplash.com/photo-1534751516642-a171edd26a0d?w=200&auto=format&fit=crop&q=80",
+    "country": "Singapore",
+    "city": "Singapore",
+    "college": "National University of Singapore (NUS)",
+    "department": "Business Analytics",
+    "year": "3rd Year (Junior)",
+    "bio": "Analytics student passionate about turning data into actionable visual stories. Teaching Tableau, PowerBI, Excel advanced modeling, and Python pandas.",
+    "verified": true,
+    "rating": 4.94,
+    "reviewCount": 22,
+    "exchangesCompleted": 19,
+    "skillsTaught": [
+      "Data Visualization (Tableau/PowerBI)",
+      "Financial Modeling in Excel",
+      "Pandas & Python for Analytics"
+    ],
+    "skillsLearning": [
+      "Figma UI",
+      "Mobile App Development"
+    ],
+    "badge": "Analytics Pro",
+    "isCurrentUser": false
+  }
+]

@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusLoop | Start with your campus. Connect with the world.</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/static/css/custom.css">
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="sticky top-0 z-40 glass-nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
+        
+        <!-- Logo & Active Campus -->
+        <div class="flex items-center gap-4 sm:gap-6">
+          <a href="#home" class="flex items-center gap-2.5 group">
+            <div class="w-10 h-10 rounded-xl brand-gradient flex items-center justify-center text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition-transform">
+              <i data-lucide="infinity" class="w-6 h-6 stroke-[2.5]"></i>
+            </div>
+            <div>
+              <span class="text-xl font-extrabold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
+                Campus<span class="text-indigo-600">Loop</span>
+              </span>
+              <p class="hidden sm:block text-[10px] uppercase tracking-wider font-bold text-slate-400 -mt-1">Skill Exchange</p>
+            </div>
+          </a>
+
+          <!-- Active Campus Indicator & Switcher Button -->
+          <div id="current-campus-badge" class="hidden md:flex items-center">
+            <!-- Populated dynamically by app.js -->
+          </div>
+        </div>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden lg:flex items-center gap-1 xl:gap-2">
+          <a href="#home" data-view="home" class="nav-link px-3.5 py-2 text-sm font-semibold rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition-colors">Home</a>
+          <a href="#skills" data-view="skills" class="nav-link px-3.5 py-2 text-sm font-semibold rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition-colors">Explore Skills</a>
+          <a href="#students" data-view="students" class="nav-link px-3.5 py-2 text-sm font-semibold rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition-colors">Explore Students</a>
+          <a href="#dashboard" data-view="dashboard" class="nav-link px-3.5 py-2 text-sm font-semibold rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition-colors">Dashboard</a>
+          <a href="#requests" data-view="requests" class="nav-link relative px-3.5 py-2 text-sm font-semibold rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition-colors">
+            Requests
+            <span id="nav-requests-badge" class="hidden absolute top-1.5 right-1 px-1.5 py-0.2 text-[10px] font-bold rounded-full bg-rose-500 text-white">0</span>
+          </a>
+        </nav>
+
+        <!-- Right Action Buttons & User Menu -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Upload Skill Button -->
+          <button onclick="navigateTo('upload')" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-white brand-gradient shadow-md shadow-indigo-200 hover:shadow-lg hover:brightness-105 active:scale-95 transition-all">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Share a Skill</span>
+          </button>
+
+          <!-- Persona Switcher (For easy peer-to-peer testing) -->
+          <button onclick="openPersonaModal()" class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition-colors border border-slate-200" title="Switch between students to test requests">
+            <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+            <span class="hidden md:inline">Switch Persona</span>
+          </button>
+
+          <!-- Current Student Profile Quick Pill -->
+          <div onclick="navigateTo('profile')" class="flex items-center gap-2 p-1 pl-1.5 pr-2 rounded-full hover:bg-slate-100 border border-slate-200/80 cursor-pointer transition-colors">
+            <img id="nav-user-avatar" src="" alt="Avatar" class="w-8 h-8 rounded-full object-cover ring-2 ring-indigo-200" />
+            <div class="hidden xl:block text-left text-xs">
+              <p id="nav-user-name" class="font-bold text-slate-900 leading-tight">Student</p>
+              <p id="nav-user-college" class="text-[10px] text-slate-500 truncate max-w-[100px]">Campus</p>
+            </div>
+          </div>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button id="mobile-menu-btn" class="lg:hidden p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-nav-menu" class="hidden lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-5 space-y-2 shadow-lg">
+      <div class="pb-2 mb-2 border-b border-slate-100 flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Campus Selection</span>
+        <button onclick="openCollegeModal()" class="text-xs font-bold text-indigo-600">Change Campus</button>
+      </div>
+      <a href="#home" data-view="home" class="nav-link block px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-100">Home</a>
+      <a href="#skills" data-view="skills" class="nav-link block px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-100">Explore Skills</a>
+      <a href="#students" data-view="students" class="nav-link block px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-100">Explore Students</a>
+      <a href="#dashboard" data-view="dashboard" class="nav-link block px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-100">Student Dashboard</a>
+      <a href="#requests" data-view="requests" class="nav-link flex items-center justify-between px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-100">
+        <span>Learning Requests</span>
+        <span id="mobile-requests-badge" class="hidden px-2 py-0.5 text-xs font-bold rounded-full bg-rose-500 text-white">0</span>
+      </a>
+      <a href="#profile" data-view="profile" class="nav-link block px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-100">My Profile</a>
+      <div class="pt-2">
+        <button onclick="navigateTo('upload')" class="w-full py-2.5 rounded-xl text-sm font-bold text-white brand-gradient shadow-md flex items-center justify-center gap-2">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Share a Skill</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN VIEW CONTAINERS ================= -->
+  <main class="flex-1">
+
+    <!-- 1. HOME VIEW -->
+    <section id="view-home" class="view-section">
+      <!-- Hero Section -->
+      <div class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28">
+        <div class="hero-glow -top-40 left-1/2 -translate-x-1/2"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          
+          <!-- Tagline Pill -->
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs sm:text-sm font-bold mb-6 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-indigo-600 pulse-badge"></span>
+            <span>100% Free Peer-to-Peer Student Skill Sharing</span>
+          </div>
+
+          <!-- Main Headline with Tagline -->
+          <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 max-w-4xl mx-auto leading-tight sm:leading-none mb-6">
+            Start with your campus. <br class="hidden sm:inline" />
+            <span class="brand-gradient-text">Connect with the world.</span>
+          </h1>
+
+          <p class="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+            CampusLoop connects students from colleges and universities worldwide to teach and learn skills completely free. Connect with seniors, juniors, classmates, and global mentors without monetary barriers.
+          </p>
+
+          <!-- Interactive Search & Action Bar -->
+          <div class="max-w-2xl mx-auto bg-white p-2.5 rounded-2xl shadow-xl shadow-indigo-100/70 border border-slate-200 flex flex-col sm:flex-row items-center gap-2">
+            <div class="relative flex-1 w-full">
+              <i data-lucide="search" class="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+              <input type="text" id="hero-search-input" placeholder="Search Python, Figma, Video Editing, System Design..." class="w-full pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+            </div>
+            <button id="hero-search-btn" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-sm font-bold shadow-md shadow-indigo-200 transition-all flex items-center justify-center gap-1.5">
+              <span>Find Mentors</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Campus Anchor Banner -->
+          <div class="mt-6 inline-flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500">
+            <span>Your active hub:</span>
+            <span class="font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-200" id="hero-campus-name">Anna University (CEG / ACT Campus)</span>
+            <button onclick="openCollegeModal()" class="text-indigo-600 underline font-semibold hover:text-indigo-800">Change College</button>
+          </div>
+
+          <!-- Platform Stats Metrics -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto mt-14 pt-10 border-t border-slate-200/80">
+            <div class="p-4 bg-white/70 backdrop-blur rounded-2xl border border-slate-200 shadow-sm">
+              <div class="text-2xl sm:text-3xl font-extrabold text-slate-900" id="stat-students">1,432+</div>
+              <div class="text-xs font-semibold text-slate-500 mt-0.5">Verified Students</div>
+            </div>
+            <div class="p-4 bg-white/70 backdrop-blur rounded-2xl border border-slate-200 shadow-sm">
+              <div class="text-2xl sm:text-3xl font-extrabold text-indigo-600" id="stat-skills">2,160+</div>
+              <div class="text-xs font-semibold text-slate-500 mt-0.5">Free Skills Offered</div>
+            </div>
+            <div class="p-4 bg-white/70 backdrop-blur rounded-2xl border border-slate-200 shadow-sm">
+              <div class="text-2xl sm:text-3xl font-extrabold text-slate-900" id="stat-colleges">24+ Universities</div>
+              <div class="text-xs font-semibold text-slate-500 mt-0.5">Global Campuses</div>
+            </div>
+            <div class="p-4 bg-white/70 backdrop-blur rounded-2xl border border-slate-200 shadow-sm">
+              <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600" id="stat-exchanges">92+ Completed</div>
+              <div class="text-xs font-semibold text-slate-500 mt-0.5">Zero-Cost Exchanges</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Core Features Grid (The 7 Pillars Requested) -->
+      <div class="py-16 bg-white border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-14">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">Built By Students, For Students</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3 mb-4">Core CampusLoop Capabilities</h2>
+            <p class="text-slate-600 text-sm sm:text-base">Everything you need to exchange knowledge seamlessly, build meaningful campus connections, and learn without paying money.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- 1. College Selection -->
+            <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200 hover:border-indigo-300 card-hover">
+              <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-5">
+                <i data-lucide="building-2" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">1. College Selection</h3>
+              <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                Choose your country, city, and college/university to anchor yourself in your local campus community and connect with peers who share your academic calendar.
+              </p>
+              <button onclick="openCollegeModal()" class="text-xs font-bold text-indigo-600 flex items-center gap-1 hover:text-indigo-800">
+                <span>Select Your College</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- 2. Verified Student Profiles -->
+            <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200 hover:border-indigo-300 card-hover">
+              <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-5">
+                <i data-lucide="badge-check" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">2. Verified Student Profiles</h3>
+              <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                Profiles spotlight student name, verified college, department, academic year (freshman to senior), bio, skills to teach, and skills they want to learn.
+              </p>
+              <button onclick="navigateTo('students')" class="text-xs font-bold text-indigo-600 flex items-center gap-1 hover:text-indigo-800">
+                <span>Browse Student Profiles</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- 3. Skill Upload -->
+            <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200 hover:border-indigo-300 card-hover">
+              <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-5">
+                <i data-lucide="sparkles" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">3. Skill Upload</h3>
+              <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                List the skills you can teach: coding, graphic design, video editing, communication, languages, or engineering, complete with learning topics and availability.
+              </p>
+              <button onclick="navigateTo('upload')" class="text-xs font-bold text-indigo-600 flex items-center gap-1 hover:text-indigo-800">
+                <span>Upload a Skill</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- 4. Campus-Based Discovery -->
+            <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200 hover:border-indigo-300 card-hover">
+              <div class="w-12 h-12 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center mb-5">
+                <i data-lucide="map-pin" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">4. Campus-Based Discovery</h3>
+              <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                Find seniors who aced the courses you are taking, juniors seeking guidance, and classmates from your department with 1-click campus filters.
+              </p>
+              <button onclick="state.studentsFilter.scope='same_campus'; navigateTo('students')" class="text-xs font-bold text-indigo-600 flex items-center gap-1 hover:text-indigo-800">
+                <span>Explore My Campus</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- 5. Cross-College Learning -->
+            <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200 hover:border-indigo-300 card-hover">
+              <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-5">
+                <i data-lucide="globe-2" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">5. Cross-College Learning</h3>
+              <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                Expand beyond your borders. Learn from peers at Stanford, Oxford, IIT Madras, NUS, TU Munich, and nearby colleges through virtual 1-on-1 sessions.
+              </p>
+              <button onclick="state.skillsFilter.scope='all'; navigateTo('skills')" class="text-xs font-bold text-indigo-600 flex items-center gap-1 hover:text-indigo-800">
+                <span>Explore Global Skills</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- 6. Skill Search & Requests -->
+            <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200 hover:border-indigo-300 card-hover">
+              <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-5">
+                <i data-lucide="send" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">6. Skill Search & Requests</h3>
+              <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                Fast search with multi-filter keywords. Send direct structured learning requests specifying your learning goals, proposed time slot, and exchange offer.
+              </p>
+              <button onclick="navigateTo('requests')" class="text-xs font-bold text-indigo-600 flex items-center gap-1 hover:text-indigo-800">
+                <span>View Request Center</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- 7. Free Skill Exchange (Span Full on bottom) -->
+            <div class="md:col-span-2 lg:col-span-3 p-8 rounded-2xl brand-gradient text-white shadow-xl shadow-indigo-200/50 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div class="max-w-2xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur text-xs font-bold mb-3">
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                  <span>Zero Fees Guaranteed</span>
+                </div>
+                <h3 class="text-2xl font-black mb-2">7. Free Skill Exchange: Knowledge Barter For Everyone</h3>
+                <p class="text-indigo-100 text-sm leading-relaxed">
+                  No subscriptions, no hidden tokens, and no payment walls. You teach what you know, and learn what you need. A pure, egalitarian community for university students worldwide.
+                </p>
+              </div>
+              <button onclick="navigateTo('skills')" class="shrink-0 px-6 py-3 rounded-xl bg-white text-indigo-700 font-bold text-sm shadow-md hover:bg-slate-50 active:scale-95 transition-all">
+                Start Learning Now
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Skills Section -->
+      <div class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div>
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Top Rated Curriculums</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Trending Peer Mentorships</h2>
+          </div>
+          <button onclick="navigateTo('skills')" class="inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 hover:text-indigo-700">
+            <span>View All Skills</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <div id="featured-skills-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+
+      <!-- Top Mentors Showcase -->
+      <div class="py-16 bg-slate-100/70 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Campus Leaders</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Meet Verified Student Mentors</h2>
+            </div>
+            <button onclick="navigateTo('students')" class="inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600 hover:text-indigo-700">
+              <span>Explore All Students</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <div id="top-mentors-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Populated dynamically by app.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- How It Works Steps -->
+      <div class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">Simple 4-Step Process</span>
+          <h2 class="text-3xl font-extrabold text-slate-900 mt-2 mb-3">How CampusLoop Works</h2>
+          <p class="text-slate-600 text-sm">Getting started takes less than 60 seconds with no credit card or setup friction.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+          
+          <div class="text-center p-6 bg-white rounded-2xl border border-slate-200 shadow-sm relative z-10">
+            <div class="w-12 h-12 rounded-full brand-gradient text-white flex items-center justify-center font-black text-lg mx-auto mb-4 shadow-md shadow-indigo-200">1</div>
+            <h4 class="text-base font-bold text-slate-900 mb-2">Select Campus</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">Choose your country, city, and university to instantly join your campus network.</p>
+          </div>
+
+          <div class="text-center p-6 bg-white rounded-2xl border border-slate-200 shadow-sm relative z-10">
+            <div class="w-12 h-12 rounded-full brand-gradient text-white flex items-center justify-center font-black text-lg mx-auto mb-4 shadow-md shadow-indigo-200">2</div>
+            <h4 class="text-base font-bold text-slate-900 mb-2">Find a Skill or Peer</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">Search coding, design, or public speaking by campus or explore worldwide universities.</p>
+          </div>
+
+          <div class="text-center p-6 bg-white rounded-2xl border border-slate-200 shadow-sm relative z-10">
+            <div class="w-12 h-12 rounded-full brand-gradient text-white flex items-center justify-center font-black text-lg mx-auto mb-4 shadow-md shadow-indigo-200">3</div>
+            <h4 class="text-base font-bold text-slate-900 mb-2">Send Free Request</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">State your learning goal, pick a convenient time slot, and propose a knowledge trade.</p>
+          </div>
+
+          <div class="text-center p-6 bg-white rounded-2xl border border-slate-200 shadow-sm relative z-10">
+            <div class="w-12 h-12 rounded-full brand-gradient text-white flex items-center justify-center font-black text-lg mx-auto mb-4 shadow-md shadow-indigo-200">4</div>
+            <h4 class="text-base font-bold text-slate-900 mb-2">Meet & Learn Free</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">Accept requests, get an automatic virtual room link, and level up your skills together.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 2. DASHBOARD VIEW -->
+    <section id="view-dashboard" class="view-section hidden py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Welcome Banner -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+        <div class="flex items-center gap-4 sm:gap-5 z-10">
+          <img id="dash-student-avatar" src="" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover ring-4 ring-indigo-50 shadow-md" />
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-xl sm:text-2xl font-black text-slate-900">Welcome, <span id="dash-student-name">Student</span>!</h1>
+              <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <i data-lucide="check-circle-2" class="w-3 h-3"></i> Active
+              </span>
+            </div>
+            <p id="dash-student-college" class="text-xs sm:text-sm font-semibold text-indigo-600 mt-0.5"></p>
+            <p id="dash-student-dept" class="text-xs text-slate-500 mt-0.5"></p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 z-10 w-full md:w-auto">
+          <button onclick="openCollegeModal()" class="flex-1 md:flex-none px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors flex items-center justify-center gap-1.5">
+            <i data-lucide="school" class="w-4 h-4 text-indigo-600"></i>
+            <span>Change Campus</span>
+          </button>
+          <button onclick="navigateTo('upload')" class="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-200 transition-all flex items-center justify-center gap-1.5">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Upload New Skill</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Skills Listed</span>
+            <i data-lucide="award" class="w-5 h-5 text-indigo-500"></i>
+          </div>
+          <div id="dash-stat-skills" class="text-2xl font-black text-slate-900">0</div>
+          <div class="text-[11px] text-slate-400 mt-1">Available for peers to learn</div>
+        </div>
+
+        <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Active Exchanges</span>
+            <i data-lucide="repeat" class="w-5 h-5 text-emerald-500"></i>
+          </div>
+          <div id="dash-stat-active" class="text-2xl font-black text-emerald-600">0</div>
+          <div class="text-[11px] text-slate-400 mt-1">Accepted & scheduled</div>
+        </div>
+
+        <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Exchanges Done</span>
+            <i data-lucide="check-check" class="w-5 h-5 text-blue-500"></i>
+          </div>
+          <div id="dash-stat-completed" class="text-2xl font-black text-slate-900">0</div>
+          <div class="text-[11px] text-slate-400 mt-1">Free peer tutoring sessions</div>
+        </div>
+
+        <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between text-slate-400 mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Mentor Rating</span>
+            <i data-lucide="star" class="w-5 h-5 text-amber-500 fill-amber-400"></i>
+          </div>
+          <div class="flex items-baseline gap-1">
+            <span id="dash-stat-rating" class="text-2xl font-black text-slate-900">4.9</span>
+            <span class="text-xs text-slate-400">/ 5.0</span>
+          </div>
+          <div class="text-[11px] text-slate-400 mt-1">Campus reputation</div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Active Exchanges & Meet Link -->
+        <div class="lg:col-span-2 space-y-8">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <i data-lucide="calendar" class="w-5 h-5 text-indigo-600"></i>
+                <span>Active Learning Exchanges</span>
+              </h3>
+              <button onclick="navigateTo('requests')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                Manage All Requests &rarr;
+              </button>
+            </div>
+            <div id="dash-active-exchanges-container" class="space-y-3">
+              <!-- Populated dynamically by app.js -->
+            </div>
+          </div>
+
+          <!-- My Uploaded Skills Manager -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                <i data-lucide="book-marked" class="w-5 h-5 text-indigo-600"></i>
+                <span>My Teaching Skills</span>
+              </h3>
+              <button onclick="navigateTo('upload')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+                + Add Another Skill
+              </button>
+            </div>
+            <div id="dash-my-skills-container" class="space-y-3">
+              <!-- Populated dynamically by app.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Recommended Campus Peers & Quick Links -->
+        <div class="space-y-6">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+            <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <i data-lucide="users" class="w-5 h-5 text-indigo-600"></i>
+              <span>Suggested Peer Matches</span>
+            </h3>
+            <div id="dash-recommended-container" class="space-y-3">
+              <!-- Populated dynamically by app.js -->
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-br from-indigo-50 to-cyan-50 rounded-2xl p-6 border border-indigo-100">
+            <h4 class="text-sm font-bold text-indigo-900 mb-2">Need a study partner for an upcoming exam?</h4>
+            <p class="text-xs text-indigo-700 leading-relaxed mb-4">Search students in your department or connect with seniors who have already taken the subject.</p>
+            <button onclick="state.studentsFilter.scope='same_campus'; navigateTo('students')" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition-colors">
+              Find Seniors in My College
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. EXPLORE SKILLS VIEW -->
+    <section id="view-skills" class="view-section hidden py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Header -->
+      <div class="mb-8">
+        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">Catalog</span>
+        <h1 class="text-3xl font-black text-slate-900 mt-2">Explore Skills & Mentorships</h1>
+        <p class="text-slate-600 text-sm mt-1">Discover skills taught by students at your campus or around the globe completely free.</p>
+      </div>
+
+      <!-- Scope Filter Tabs (Campus vs Global) -->
+      <div class="flex items-center gap-6 border-b border-slate-200 mb-6 text-sm font-medium">
+        <button class="skills-scope-tab tab-active pb-3 text-slate-600 hover:text-indigo-600 transition-colors" data-scope="all">
+          All Colleges (Global)
+        </button>
+        <button id="skills-tab-campus" class="skills-scope-tab pb-3 text-slate-600 hover:text-indigo-600 transition-colors" data-scope="same_campus">
+          My Campus
+        </button>
+        <button class="skills-scope-tab pb-3 text-slate-600 hover:text-indigo-600 transition-colors" data-scope="nearby">
+          Nearby Colleges
+        </button>
+      </div>
+
+      <!-- Search & Filters Bar -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        
+        <!-- Search Input -->
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+          <input type="text" id="skills-search-input" placeholder="Search by skill name, topic, mentor or university..." class="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+        </div>
+
+        <!-- Filter Selects -->
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="skills-level-filter" class="px-3 py-2 text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-700">
+            <option value="all">All Difficulty Levels</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+
+          <select id="skills-mode-filter" class="px-3 py-2 text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-700">
+            <option value="all">All Modes</option>
+            <option value="Online">Online Only</option>
+            <option value="Campus">In-Person Campus</option>
+            <option value="Both">Both</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none">
+        <button class="skill-category-pill px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-sm shrink-0" data-category="all">
+          All Categories
+        </button>
+        <button class="skill-category-pill px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors shrink-0" data-category="Coding & Development">
+          Coding & Development
+        </button>
+        <button class="skill-category-pill px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors shrink-0" data-category="Design & Creative">
+          Design & Creative
+        </button>
+        <button class="skill-category-pill px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors shrink-0" data-category="Video Editing & Media">
+          Video Editing & Media
+        </button>
+        <button class="skill-category-pill px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors shrink-0" data-category="Communication & Languages">
+          Communication & Languages
+        </button>
+        <button class="skill-category-pill px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors shrink-0" data-category="Academics & Engineering">
+          Academics & Engineering
+        </button>
+      </div>
+
+      <!-- Result Count -->
+      <div class="flex items-center justify-between mb-6">
+        <p id="skills-result-count" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Loading skills...</p>
+        <button onclick="navigateTo('upload')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i> List Your Skill
+        </button>
+      </div>
+
+      <!-- Skills Cards Grid -->
+      <div id="skills-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Populated dynamically by app.js -->
+      </div>
+
+    </section>
+
+    <!-- 4. EXPLORE STUDENTS VIEW -->
+    <section id="view-students" class="view-section hidden py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Header -->
+      <div class="mb-8">
+        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">Community Directory</span>
+        <h1 class="text-3xl font-black text-slate-900 mt-2">Explore Verified Students</h1>
+        <p class="text-slate-600 text-sm mt-1">Connect with seniors, juniors, classmates from your campus or peer learners worldwide.</p>
+      </div>
+
+      <!-- Scope Filter Tabs (My Campus vs Worldwide) -->
+      <div class="flex items-center gap-6 border-b border-slate-200 mb-6 text-sm font-medium">
+        <button id="students-tab-campus" class="students-scope-tab tab-active pb-3 text-slate-600 hover:text-indigo-600 transition-colors" data-scope="same_campus">
+          My Campus (Seniors & Classmates)
+        </button>
+        <button class="students-scope-tab pb-3 text-slate-600 hover:text-indigo-600 transition-colors" data-scope="nearby">
+          Nearby Colleges
+        </button>
+        <button class="students-scope-tab pb-3 text-slate-600 hover:text-indigo-600 transition-colors" data-scope="all">
+          Worldwide Universities
+        </button>
+      </div>
+
+      <!-- Search & Filters Bar -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+        
+        <!-- Search Input -->
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+          <input type="text" id="students-search-input" placeholder="Search student name, department, or skill they teach..." class="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+        </div>
+
+        <!-- Academic Year Filter -->
+        <div class="flex items-center gap-2">
+          <select id="students-year-filter" class="px-3 py-2 text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-700">
+            <option value="all">All Academic Years</option>
+            <option value="1st Year">1st Year (Freshman)</option>
+            <option value="2nd Year">2nd Year (Sophomore)</option>
+            <option value="3rd Year">3rd Year (Junior)</option>
+            <option value="4th Year">4th Year (Senior)</option>
+            <option value="Graduate">Graduate Student</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Result Count -->
+      <div class="flex items-center justify-between mb-6">
+        <p id="students-result-count" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Loading students...</p>
+        <button onclick="openCollegeModal()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+          Filter by another college &rarr;
+        </button>
+      </div>
+
+      <!-- Students Cards Grid -->
+      <div id="students-grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Populated dynamically by app.js -->
+      </div>
+
+    </section>
+
+    <!-- 5. SKILL UPLOAD VIEW -->
+    <section id="view-upload" class="view-section hidden py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="mb-8 max-w-2xl">
+        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">Share Your Knowledge</span>
+        <h1 class="text-3xl font-black text-slate-900 mt-2">List a Skill to Teach</h1>
+        <p class="text-slate-600 text-sm mt-1">Whether it's Python, Figma, video editing, or public speaking—sharing your superpower helps fellow students and earns you free peer mentorship!</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Form Section -->
+        <div class="lg:col-span-2 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+          <form id="skill-upload-form" class="space-y-6">
+            
+            <!-- Title -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                Skill Title <span class="text-rose-500">*</span>
+              </label>
+              <input type="text" id="upload-title" required placeholder="e.g. Modern React & Next.js App Building" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+            </div>
+
+            <!-- Category & Level -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Category <span class="text-rose-500">*</span></label>
+                <select id="upload-category" required class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+                  <option value="Coding & Development">Coding & Development</option>
+                  <option value="Design & Creative">Design & Creative</option>
+                  <option value="Video Editing & Media">Video Editing & Media</option>
+                  <option value="Communication & Languages">Communication & Languages</option>
+                  <option value="Academics & Engineering">Academics & Engineering</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Target Skill Level</label>
+                <select id="upload-level" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+                  <option value="Beginner">Beginner Friendly</option>
+                  <option value="Intermediate" selected>Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                  <option value="All Levels">All Levels Welcome</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Mode & Duration -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Teaching Mode</label>
+                <select id="upload-mode" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+                  <option value="Both (Online & Campus)">Both (Online & Campus)</option>
+                  <option value="Online">Online Virtual Room Only</option>
+                  <option value="Campus Only">On-Campus In Person</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Session Duration</label>
+                <select id="upload-duration" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+                  <option value="30 mins / session">30 mins / session</option>
+                  <option value="45 mins / session" selected>45 mins / session</option>
+                  <option value="60 mins / session">60 mins / session</option>
+                  <option value="90 mins / workshop">90 mins / workshop</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Availability & Prerequisites -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Weekly Availability</label>
+                <input type="text" id="upload-availability" placeholder="e.g. Weekends 2 PM - 5 PM or Mon/Wed evenings" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Prerequisites</label>
+                <input type="text" id="upload-prereq" placeholder="e.g. Basic HTML/JS or none at all" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+              </div>
+            </div>
+
+            <!-- Topics Covered (one per line) -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                What Topics Will You Cover? (One per line)
+              </label>
+              <textarea id="upload-topics" rows="3" placeholder="Core concepts & fundamentals&#10;Hands-on code examples&#10;Debugging and best practices" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20"></textarea>
+            </div>
+
+            <!-- Description -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+                Detailed Description <span class="text-rose-500">*</span>
+              </label>
+              <textarea id="upload-description" required rows="4" placeholder="Explain your teaching approach, what project you will build together, and how students will benefit..." class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20"></textarea>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-xs text-slate-400">100% Free peer teaching. No commercial charge allowed.</span>
+              <button type="submit" class="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold text-sm rounded-xl shadow-md shadow-indigo-200 transition-all flex items-center gap-2">
+                <span>List Skill on CampusLoop</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Live Preview Card -->
+        <div>
+          <div class="sticky top-24">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
+              <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+              Live Card Preview
+            </h3>
+
+            <div class="bg-white rounded-2xl p-6 border-2 border-dashed border-indigo-200 shadow-sm">
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <span id="preview-skill-cat" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                  Coding & Development
+                </span>
+                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                  Free Exchange
+                </span>
+              </div>
+
+              <h4 id="preview-skill-title" class="text-base font-bold text-slate-900 mb-2 line-clamp-2">
+                Skill Title Will Appear Here
+              </h4>
+
+              <p id="preview-skill-desc" class="text-xs text-slate-600 line-clamp-3 mb-4 leading-relaxed">
+                Describe what peers will learn during your mentorship session...
+              </p>
+
+              <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <span class="text-[11px] text-slate-500">Listed by You</span>
+                <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-lg">Preview</span>
+              </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-emerald-50 rounded-2xl border border-emerald-100 text-emerald-800 text-xs leading-relaxed">
+              <p class="font-bold flex items-center gap-1 mb-1">
+                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+                CampusLoop Honor Code
+              </p>
+              Students teach out of passion and mutual peer exchange. You are helping build a collaborative college community!
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- 6. LEARNING REQUESTS VIEW -->
+    <section id="view-requests" class="view-section hidden py-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">Exchange Center</span>
+          <h1 class="text-3xl font-black text-slate-900 mt-2">Learning Requests</h1>
+          <p class="text-slate-600 text-sm mt-1">Review incoming student requests to learn from you, or track requests you sent to other peers.</p>
+        </div>
+
+        <button onclick="navigateTo('skills')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5 self-start sm:self-auto">
+          <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+          <span>Discover More Skills</span>
+        </button>
+      </div>
+
+      <!-- Tabs (Received vs Sent) & Filter -->
+      <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm mb-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <button id="tab-req-received" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-indigo-600 text-white shadow-sm transition-all">
+            Received (Incoming)
+          </button>
+          <button id="tab-req-sent" class="px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all">
+            Sent (Outgoing)
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Status:</span>
+          <select id="requests-status-filter" class="flex-1 sm:flex-none px-3 py-2 text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-700">
+            <option value="all">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Accepted">Accepted & Scheduled</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Requests List Container -->
+      <div id="requests-list-container" class="space-y-4">
+        <!-- Populated dynamically by app.js -->
+      </div>
+
+    </section>
+
+    <!-- 7. PROFILE VIEW -->
+    <section id="view-profile" class="view-section hidden py-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Profile Card -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+        
+        <!-- Cover Banner -->
+        <div class="h-44 brand-gradient relative">
+          <div class="absolute top-4 right-4 flex items-center gap-2">
+            <button onclick="openPersonaModal()" class="px-3 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur text-white text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5">
+              <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+              <span>Test Other Personas</span>
+            </button>
+            <button onclick="openEditProfileModal()" class="px-4 py-1.5 bg-white text-indigo-700 text-xs font-bold rounded-xl shadow-sm hover:bg-slate-50 transition-colors flex items-center gap-1.5">
+              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+              <span>Edit Profile</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="px-6 sm:px-10 pb-8">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between -mt-16 sm:-mt-20 gap-4 mb-6">
+            <div class="flex items-end gap-4">
+              <div class="relative">
+                <img id="prof-avatar" src="" class="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl object-cover ring-4 ring-white shadow-lg bg-white" />
+                <span class="absolute bottom-1 right-1 bg-indigo-600 text-white rounded-full p-1 shadow" title="Verified Campus Student">
+                  <i data-lucide="check" class="w-4 h-4 stroke-[3]"></i>
+                </span>
+              </div>
+              <div class="mb-2">
+                <div class="flex items-center gap-2">
+                  <h1 id="prof-name" class="text-2xl sm:text-3xl font-black text-slate-900">Renuga J</h1>
+                  <span id="prof-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                    Top Campus Peer Mentor
+                  </span>
+                </div>
+                <p id="prof-college" class="text-sm font-bold text-indigo-600 mt-0.5"></p>
+                <p class="text-xs text-slate-500 mt-0.5">
+                  <span id="prof-dept">Computer Science & Engineering</span> • <span id="prof-year">3rd Year</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Stats Pills -->
+            <div class="flex items-center gap-3">
+              <div class="text-center px-4 py-2 bg-slate-50 rounded-2xl border border-slate-100">
+                <div class="text-lg font-black text-slate-900" id="prof-rating">4.9</div>
+                <div class="text-[10px] text-slate-400 font-semibold uppercase">Rating</div>
+              </div>
+              <div class="text-center px-4 py-2 bg-slate-50 rounded-2xl border border-slate-100">
+                <div class="text-lg font-black text-slate-900" id="prof-reviews-count">18</div>
+                <div class="text-[10px] text-slate-400 font-semibold uppercase">Reviews</div>
+              </div>
+              <div class="text-center px-4 py-2 bg-slate-50 rounded-2xl border border-slate-100">
+                <div class="text-lg font-black text-emerald-600" id="prof-exchanges-count">14</div>
+                <div class="text-[10px] text-slate-400 font-semibold uppercase">Exchanges</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bio & Location -->
+          <div class="max-w-3xl space-y-3">
+            <p id="prof-bio" class="text-sm text-slate-700 leading-relaxed font-normal"></p>
+            <div class="flex items-center gap-4 text-xs text-slate-500">
+              <span class="flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-indigo-500"></i>
+                <span id="prof-location">Chennai, India</span>
+              </span>
+              <span class="flex items-center gap-1">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
+                <span>College Email Verified</span>
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Skills Split Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Skills I Can Teach -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="award" class="w-5 h-5 text-indigo-600"></i>
+              <span>Skills I Can Teach</span>
+            </h3>
+            <button onclick="navigateTo('upload')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+              + Add Skill
+            </button>
+          </div>
+          <div id="prof-skills-taught" class="flex flex-wrap gap-2">
+            <!-- Populated dynamically by app.js -->
+          </div>
+        </div>
+
+        <!-- Skills I Want To Learn -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-5 h-5 text-emerald-600"></i>
+              <span>Skills I Want To Learn</span>
+            </h3>
+            <button onclick="openEditProfileModal()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">
+              Edit
+            </button>
+          </div>
+          <div id="prof-skills-learning" class="flex flex-wrap gap-2">
+            <!-- Populated dynamically by app.js -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-white border-t border-slate-200 mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-2.5 mb-3">
+            <div class="w-8 h-8 rounded-lg brand-gradient flex items-center justify-center text-white">
+              <i data-lucide="infinity" class="w-5 h-5 stroke-[2.5]"></i>
+            </div>
+            <span class="text-lg font-black text-slate-900">CampusLoop</span>
+          </div>
+          <p class="text-xs text-slate-500 max-w-sm leading-relaxed mb-4">
+            "Start with your campus. Connect with the world." The universal platform for university and college students worldwide to exchange knowledge freely.
+          </p>
+          <div class="flex items-center gap-2 text-xs text-emerald-600 font-semibold bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 w-fit">
+            <i data-lucide="heart" class="w-4 h-4 fill-emerald-500"></i>
+            <span>100% Free Forever • No Ads • No Subscriptions</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">Quick Navigation</h4>
+          <ul class="space-y-2 text-xs text-slate-600">
+            <li><a href="#home" class="hover:text-indigo-600">Home</a></li>
+            <li><a href="#skills" class="hover:text-indigo-600">Explore Skills</a></li>
+            <li><a href="#students" class="hover:text-indigo-600">Explore Students</a></li>
+            <li><a href="#dashboard" class="hover:text-indigo-600">Student Dashboard</a></li>
+            <li><a href="#requests" class="hover:text-indigo-600">Learning Requests</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">Top Campuses</h4>
+          <ul class="space-y-2 text-xs text-slate-600">
+            <li>Anna University (CEG / ACT)</li>
+            <li>IIT Madras & IIT Bombay</li>
+            <li>Stanford University & MIT</li>
+            <li>University of Oxford</li>
+            <li>National University of Singapore</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
+        <p>&copy; 2026 CampusLoop. All rights reserved.</p>
+        <p>Built for students worldwide to share knowledge without monetary friction.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= INTERACTIVE MODALS ================= -->
+
+  <!-- 1. COLLEGE SELECTION MODAL -->
+  <div id="college-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in-95 duration-200">
+      
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+            <i data-lucide="school" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Select Your Campus</h3>
+            <p class="text-xs text-slate-500">Connect with your university community</p>
+          </div>
+        </div>
+        <button onclick="closeCollegeModal()" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 mb-6">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Country</label>
+          <select id="modal-select-country" class="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20"></select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">City</label>
+          <select id="modal-select-city" class="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20"></select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">College / University</label>
+          <select id="modal-select-college" class="w-full px-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20"></select>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+        <button onclick="closeCollegeModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">Cancel</button>
+        <button onclick="saveSelectedCollege()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-200 transition-all">
+          Save & Join Campus
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2. SEND LEARNING REQUEST MODAL -->
+  <div id="request-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Free Peer Mentorship</span>
+          <h3 class="text-lg font-black text-slate-900 mt-0.5">Send Learning Request</h3>
+        </div>
+        <button onclick="closeRequestModal()" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Recipient preview -->
+      <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 flex items-center gap-3 mb-5">
+        <img id="req-modal-receiver-avatar" src="" class="w-12 h-12 rounded-full object-cover ring-2 ring-indigo-100" />
+        <div class="min-w-0">
+          <h4 id="req-modal-receiver-name" class="text-sm font-bold text-slate-900 truncate">Mentor Name</h4>
+          <p id="req-modal-receiver-college" class="text-xs text-indigo-600 truncate font-semibold"></p>
+        </div>
+      </div>
+
+      <form id="send-request-form" class="space-y-4">
+        <input type="hidden" id="req-modal-receiver-id" />
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Skill to Learn</label>
+          <select id="req-modal-skill-select" class="w-full px-4 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20"></select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+            What is your learning goal? <span class="text-rose-500">*</span>
+          </label>
+          <input type="text" id="req-modal-goal" required placeholder="e.g. Master auto-layout in Figma or debug recursion" class="w-full px-4 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Preferred Time Slot</label>
+          <input type="text" id="req-modal-time" placeholder="e.g. Friday after 5 PM IST or Weekend morning" class="w-full px-4 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Your Knowledge Exchange Offer (Barter)</label>
+          <input type="text" id="req-modal-exchange-offer" placeholder="e.g. I can help with Python / Resume review" class="w-full px-4 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Personal Note</label>
+          <textarea id="req-modal-message" rows="3" placeholder="Say hi and introduce yourself briefly..." class="w-full px-4 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+          <button type="button" onclick="closeRequestModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-200 transition-all flex items-center gap-1.5">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            <span>Send Request</span>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- 3. STUDENT DETAILS MODAL -->
+  <div id="student-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between gap-4 mb-6">
+        <div class="flex items-center gap-4">
+          <img id="stu-modal-avatar" src="" class="w-16 h-16 rounded-2xl object-cover ring-2 ring-indigo-50 shadow-sm" />
+          <div>
+            <h3 id="stu-modal-name" class="text-lg font-bold text-slate-900"></h3>
+            <p id="stu-modal-college" class="text-xs font-bold text-indigo-600"></p>
+            <p id="stu-modal-dept" class="text-xs text-slate-500"></p>
+          </div>
+        </div>
+        <button onclick="closeStudentModal()" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 mb-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400">About Me</span>
+          <p id="stu-modal-bio" class="text-xs text-slate-700 leading-relaxed mt-1"></p>
+        </div>
+
+        <div class="flex items-center gap-4 text-xs text-slate-500 py-2 border-y border-slate-100">
+          <span>Location: <strong id="stu-modal-location" class="text-slate-800"></strong></span>
+          <span>Rating: <strong id="stu-modal-rating" class="text-amber-600"></strong> ★</span>
+          <span>Exchanges: <strong id="stu-modal-exchanges" class="text-emerald-600"></strong></span>
+        </div>
+
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 block">Skills Offered</span>
+          <div id="stu-modal-skills-list" class="space-y-2">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button onclick="closeStudentModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Close</button>
+        <button id="stu-modal-req-btn" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-200 transition-all flex items-center gap-1.5">
+          <i data-lucide="message-square-plus" class="w-4 h-4"></i>
+          <span>Send Learning Request</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. SKILL DETAILS MODAL -->
+  <div id="skill-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span id="skill-modal-category" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200"></span>
+            <span id="skill-modal-mode" class="text-xs text-slate-400"></span>
+          </div>
+          <h3 id="skill-modal-title" class="text-xl font-black text-slate-900 leading-snug"></h3>
+        </div>
+        <button onclick="closeSkillDetailsModal()" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <p id="skill-modal-desc" class="text-xs text-slate-600 leading-relaxed mb-4"></p>
+
+      <!-- Topics curriculum -->
+      <div class="mb-5 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Curriculum / Topics Covered</h4>
+        <ul id="skill-modal-topics" class="space-y-1.5">
+          <!-- Populated dynamically -->
+        </ul>
+      </div>
+
+      <!-- Quick specs -->
+      <div class="grid grid-cols-2 gap-3 text-xs text-slate-600 mb-5">
+        <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+          <span class="text-slate-400 block text-[10px] font-bold uppercase">Level</span>
+          <span id="skill-modal-level" class="font-bold text-slate-800"></span>
+        </div>
+        <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+          <span class="text-slate-400 block text-[10px] font-bold uppercase">Duration</span>
+          <span id="skill-modal-duration" class="font-bold text-slate-800"></span>
+        </div>
+        <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+          <span class="text-slate-400 block text-[10px] font-bold uppercase">Prerequisites</span>
+          <span id="skill-modal-prereq" class="font-bold text-slate-800"></span>
+        </div>
+        <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+          <span class="text-slate-400 block text-[10px] font-bold uppercase">Rating</span>
+          <span id="skill-modal-rating" class="font-bold text-amber-600"></span> ★
+        </div>
+      </div>
+
+      <!-- Mentor block -->
+      <div class="p-3 bg-indigo-50/60 rounded-2xl border border-indigo-100 flex items-center gap-3 mb-6">
+        <img id="skill-modal-mentor-avatar" src="" class="w-10 h-10 rounded-full object-cover ring-2 ring-indigo-200" />
+        <div>
+          <p class="text-xs font-bold text-slate-900" id="skill-modal-mentor-name"></p>
+          <p class="text-[11px] text-slate-500" id="skill-modal-mentor-college"></p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button onclick="closeSkillDetailsModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Close</button>
+        <button id="skill-modal-req-btn" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-200 transition-all flex items-center gap-1.5">
+          <span>Request This Skill (Free)</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 5. EDIT PROFILE MODAL -->
+  <div id="edit-profile-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold text-slate-900">Edit Student Profile</h3>
+        <button onclick="closeEditProfileModal()" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="edit-profile-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Full Name</label>
+          <input type="text" id="edit-prof-name" required class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Department</label>
+          <input type="text" id="edit-prof-dept" required class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Academic Year</label>
+          <select id="edit-prof-year" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none">
+            <option value="1st Year (Freshman)">1st Year (Freshman)</option>
+            <option value="2nd Year (Sophomore)">2nd Year (Sophomore)</option>
+            <option value="3rd Year (Junior)">3rd Year (Junior)</option>
+            <option value="4th Year (Senior)">4th Year (Senior)</option>
+            <option value="Graduate Student">Graduate Student</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Bio</label>
+          <textarea id="edit-prof-bio" rows="3" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Skills You Want To Learn (comma-separated)</label>
+          <input type="text" id="edit-prof-learning" placeholder="e.g. Next.js, Docker, French" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none" />
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+          <button type="button" onclick="closeEditProfileModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-200 transition-all">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. SWITCH PERSONA MODAL -->
+  <div id="persona-modal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Peer Exchange Simulation</span>
+          <h3 class="text-base font-bold text-slate-900">Switch Active Student</h3>
+        </div>
+        <button onclick="closePersonaModal()" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-500 mb-4">
+        Select another student persona to test how sent and received requests, campus filters, and mutual skill exchanges look from their perspective!
+      </p>
+
+      <div id="persona-list-container" class="space-y-2 mb-4">
+        <!-- Populated dynamically -->
+      </div>
+
+      <div class="pt-2 border-t border-slate-100 text-right">
+        <button onclick="closePersonaModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container is dynamically created by app.js -->
+
+  <!-- Application Logic -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
